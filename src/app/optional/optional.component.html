@@ -1,0 +1,150 @@
+<!-- Dropdown Menu Stuff-->
+<div class="dropdown-menu">
+    <button class="menu-btn" (click)="openDropDownMenu()">☰ </button>
+    <div class="menu-content">
+    <li class="links">Zielort<div class="wrap">
+        <div class="search">
+            <input type="text" class="form-control"  placeholder="London">
+            
+        </div>
+    </div>  
+    </li>
+    <li class="links">Anzahl<div class="wrap">
+        <div class="search">
+            <input type="number" class="form-control" placeholder="2"  min=1 max=10>
+            
+        </div>
+    </div>
+    </li>
+    <li class="links">Datum von<div class="wrap">
+        <div class="search">
+            <input type="text" class="form-control" placeholder="What are you looking for?">
+            
+        </div>
+    </div>
+    </li>
+    <li class="links">Datum bis<div class="wrap">
+        <div class="search">
+            <input type="text" class="form-control" placeholder="What are you looking for?">
+            
+        </div>
+    </div>
+    </li>
+            
+    <button class="button">Suche</button>
+    </div>
+</div>
+<!-- ####################### Main Body #########################-->
+<div class="backgroundFiller">
+    <div class="container" style="min-width: 1900px; margin: 0 auto; max-height: 1080px;">
+        <h2>Coyote48</h2>
+        <!--<img width="100" height="100" src="/assets/images/logoNew.png"> -->
+
+        <form class="main-inputs">
+            <section class="line1">
+                <div style="float: left;">
+                    <label class="optionalChoices" for="maxPrice">Maximaler Preis:</label>
+                
+                        <form class="price_slider">
+                            <input type="range" name="amountRange" min="0" max="10000" value="0" oninput="this.form.amountInput.value=this.value" />
+                            <input type="number" name="amountInput" min="0" max="10000" value="" oninput="this.form.amountRange.value=this.value"  /> 
+                        </form>
+                    
+                </div>
+
+                
+              
+             
+                
+                <br style="clear:both">
+
+            </section>
+            
+            <section class="line2" style="float: left;">
+                <div style="float: left;">
+                    <label class="hotelChoice" for="HotelChoicelabel">Wunschhotel</label>
+                    <input class="form-control" id="hotelChoice" type="text" autocomplete="off" >
+                </div>
+                <!-- Selektor für Zimmerart Hotel -->
+                <div style="float: left;">
+                    <label class="roomChoice" for="RoomChoicelabel">Art des Zimmers</label>
+                    <select name="rooms" required>
+                        <option value="" disabled selected>Optional</option>
+                        <option value="single">Einzelzimmer</option>
+                        <option value="double">Doppelzimmer</option>
+                        <option value="family">Familienzimmer (3-5 Pers.)</option>
+                    </select>
+                </div>
+                
+               
+            </section>
+
+
+            <section class="line3">
+
+                <!-- Checkboxen Flug und Zug -->
+                <div style="float: left;">
+                    
+                    <input type="checkbox"  (change)="onCheckboxClick(1)" class="flights" checked>
+                    <label for="flights">Flüge</label>
+                    
+                    
+                    <input type="checkbox"  (change)="onCheckboxClick(2)" class="trains" checked >
+                    <label for="trains">Züge</label>
+                   
+                </div>
+
+                <div style="float: right;">
+                    <p>Was ist ihnen bei einer Reise am wichtigsten?</p>
+                    <input type="checkbox"  (change)="onCheckboxClick(4)" class="timeCheck" checked>
+                    <label for="flights">Dauer</label>
+                    
+                    <input type="checkbox"  (change)="onCheckboxClick(5)" class="environmentCheck" checked>
+                    <label for="flights">Umweltfreundlichkeit</label>
+                    
+                    <input type="checkbox"  (change)="onCheckboxClick(6)" class="costCheck" checked>
+                    <label for="flights">Kostengünstig</label>
+                    
+
+                </div>
+
+                
+                    <div>
+                        <!-- Klassenselektoren für Flug und Zug -->
+                        <div>
+                            <select name="flightClassSelektor" class="trainClassSelector" required>
+                                <option value="" disabled selected>Klasse(optional)</option>
+                                <option value="firstClass">1. Klasse</option>
+                                <option value="secondClass">2. Klasse</option>
+                            </select>
+                        </div>
+                        <div>
+                            <select name="trainClass" class="trainClassSelector" required>
+                                <option value="" disabled selected>Klasse(optional)</option>
+                                <option value="firstClass">1. Klasse</option>
+                                <option value="secondClass">2. Klasse</option>
+                            </select>
+                        </div>
+                    </div>
+            </section>
+
+            <section class="line4">
+                <!-- Checkbox Gepäck  -->
+               
+                <div *ngIf="flightChecked">
+                    <p>Reisen sie mit Gepäck?</p>
+                    <input type="checkbox" (change)="onCheckboxClick(3)" class="baggage">                
+
+                        <div *ngIf="baggageChecked"> 
+                            <p>Hinweis: Wenn sie mit Gepäck fliegen entstehen Wartezeiten und ggf. erhöhte Kosten! </p>
+                        </div>  
+                    
+                </div>      
+                    <div style="float: right;">
+                        <input type="button" class="btn btn-primary" (click)="onButtonClick()" value="zu den Ergebnissen"/>
+
+                    </div>
+            </section>
+        </form>
+    </div>
+</div>

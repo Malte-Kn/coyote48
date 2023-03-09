@@ -1,0 +1,342 @@
+<body >
+    <div class="backgroundFiller">
+       
+        <!-- Dropdown Menu Stuff-->
+        <nav class=" w3-sidebar w3-bar-block w3-black w3-animate-left w3-top w3-text-light-grey w3-large dropdown" style="z-index:3;width:250px;font-weight:bold;display:none;left:0;" id="mySidebar">
+            <a (click)="w3_close()" class="w3-bar-item w3-button w3-center w3-padding-14">CLOSE</a> 
+            <div style="display: block; text-align: center; ">
+                <label for="start">Startpunkt</label>
+                
+                <input type="text" 
+                id="start" 
+                style="border-radius: 6px;"
+                #start
+                autocomplete="off"
+                placeholder="Startpunkt" 
+                value={{getStartDest()}}>
+            </div>
+
+            <div style="display: block; text-align: center; ">
+                <label for="ziel">Zielpunkt</label>
+
+                <input type="text" 
+                id="ziel" 
+                style="border-radius: 6px;"
+                #ziel
+                autocomplete="off"
+                placeholder="Zielpunkt" 
+                value={{getEndDest()}}>
+            </div>
+
+            <div style="display: block; text-align: center; ">
+                <label for="anzPers">Anzahl von Personen</label>
+
+                <input type="number" 
+                id="anzPers"
+                style="border-radius: 6px;" 
+                #anzPers
+                autocomplete="off"
+                placeholder="Anzahl von Personen" 
+                min = 1
+                value={{getNumberOfPeople()}}>
+                
+            </div>
+
+            <div style="display: block; text-align: center; ">
+                <label for="hinreise">Datum Hinreise:</label>
+                    <div>
+                      <input type="text"
+                             #startDate
+                             style="border-radius: 6px;"
+                             id="hinreise"
+                             placeholder="Datum Hinreise"
+                             value={{getStartDate()}}
+                             bsDatepicker
+                             [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD/MM/YYYY' }"
+                             placement="right"
+                             required
+                             >
+                    </div>
+            </div>
+
+            <div style="display: block; text-align: center; ">
+                <label for="rueckreise">Datum Rückreise:</label>
+                    <div>
+                      <input type="text"
+                             #endDate
+                             style="border-radius: 6px;"
+                             id="rueckreise"
+                             placeholder="Datum Rückreise:"
+                             value={{getEndDate()}}
+                             bsDatepicker
+                             [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD/MM/YYYY' }"
+                             placement="right"
+                             required
+                             >
+                    </div>
+            </div>
+
+            <div style="display: block; text-align: center; ">
+                <label for="RoomChoicelabel">Art des Zimmers</label>
+                <select #roomType style="border-radius: 6px;" name="rooms" id="RoomChoicelabel" required>
+                    <option value="" selected>Alle Optionen zeigen</option>
+                    <option value="DZ">Doppelzimmer</option>
+                    <option value="AP">Apartment</option>
+                    <option value="SU">Suite</option>
+                </select>
+            </div>
+
+            <div>
+                <!-- Klassenselektoren für Flug und Zug -->
+                <div style="display: block; text-align: center; ">
+                    <label for="verpflegung">Verpflegung</label>
+                    <br>
+                    <select #verpflegung style="border-radius: 6px;" id="verpflegung">
+                        <option value="" selected>Alle Optionen zeigen</option>
+                        <option value="HP">Halbpension</option>
+                        <option value="VP">Vollpension</option>
+                        <option value="AI">All Inclusive</option>
+                        <option value="FR">Frühstück</option>
+                        <option value="OV">Ohne Verpflegung</option>
+                    </select>
+                </div>
+
+                <div style="display: block; text-align: center; ">
+                    <label for="trainClass">Zugklasse</label>
+                    <br>
+                    <select style="border-radius: 6px;" name="trainClass">
+                        <option value="" disabled selected>Klasse(optional)</option>
+                        <option value="firstClass">1. Klasse</option>
+                        <option value="secondClass">2. Klasse</option>
+                    </select>
+                </div>
+                <div style="display: block; text-align: center; ">
+                    <label for="sorts">Sortieren nach:</label>
+                    <br>
+                    <input type="radio" name="sorts" (change)="toSort(0)">Preis<br>
+                    <input type="radio" name="sorts" (change)="toSort(1)">Reisedauer<br>
+                    <input type="radio" name="sorts" (change)="toSort(2)">Auslastung<br>
+                </div>
+            </div>
+
+            <a (click)="w3_close();onButtonClick(start.value, ziel.value, anzPers.value, startDate.value, endDate.value, roomType.value, verpflegung.value )" class="w3-bar-item w3-button w3-center w3-padding-14">SUCHE!</a> 
+        </nav>
+         <!-- End of Dropdown Menu Stuff-->
+
+        <header class="w3-container w3-top w3-xlarge w3-padding-10" style="padding-left: 0px; width: 9.2vw; background-color: rgba(33, 134, 138, 0.803); position:relative; z-index:1; border-radius: 5px;">
+            <button id="menu-toggle-input" class="w3-left w3-button w3-white w3-left{float:left!important}" (click)="w3_open()">☰</button>
+            <span><h5 style="font-size: 0.79vw; margin-right: 0;padding:0">Such Optionen</h5></span>
+        </header>
+      
+        <div class="w3-overlay w3-animate-opacity" (click)="w3_close()" style="cursor:pointer"  id="myOverlay"></div>
+           
+    
+    
+            <!--Buttons um durch Hotels zu Scrollen-->
+            <button class = "buttonLeft" (click)="moveLeft1()"><</button>
+            <button class = "buttonRight" (click)="moveRight1()">></button>
+        <div> 
+            <div class="upperBlock">
+                <drag-scroll class="hotelcontainer" 
+                drag-scroll-y-disabled="true"
+                drag-scroll-x-disabled="true"
+                scrollbar-hidden="true"
+                #nav>
+                    <!--Hotelelemente-->
+                    <div drag-scroll-item *ngFor="let hotel of hotelArr" class = "hotel" tabindex="0"  [style.background-color] = "getHotelBackground(hotel.index)"> 
+                        <div class="hotelname">{{hotel.name}}</div>
+                            <button title ="Favorite"(mousedown)="editFav(hotel.index, favArrHotel)" class ="favbox" [style.color] = "getFavoriteBackground(hotel.index, favArrHotel)">★</button>
+                        
+                        <div *ngIf="hotel.showImg"><img [src] ="hotel.imgSource"></div>
+                        <div *ngIf="!hotel.showImg">
+                            <div *ngIf="getEndDest().toUpperCase()=='BERLIN'"><iframe src='https://maps.google.com/maps?q=Pariser+PlatzBerlin&amp;t=&amp;z=10&amp;ie=UTF8&amp;iwloc=&amp;output=embed'frameborder="0" style="border:0;"gestureHandling="greedy" allowfullscreen="false" aria-hidden="true" tabindex="0"></iframe></div>
+                            <div *ngIf="getEndDest().toUpperCase()=='PARIS'"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d95029.57673648694!2d2.2695810934579743!3d48.858609581889134!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e1f06e2b70f%3A0x40b82c3688c9460!2sParis%2C%20France!5e0!3m2!1sen!2sbg!4v1593005001366!5m2!1sen!2sbg" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe></div>
+                            <div *ngIf="getEndDest().toUpperCase()=='AMSTERDAM'"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d155959.15242902955!2d4.763876233293852!3d52.354792536256!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c63fb5949a7755%3A0x6600fd4cb7c0af8d!2sAmsterdam%2C%20Netherlands!5e0!3m2!1sen!2sbg!4v1593004579464!5m2!1sen!2sbg" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe></div>
+                        </div>
+                        <button class="MapImg" (mousedown) = changeMapImg(hotel.index);>{{hotel.showImg ? 'Karte' : 'Bild'}}</button>
+                        <div class="hotelRoom">{{decodeRoomtype(hotel.room_code)}}</div>
+                        <button class="Popuphotelbutton" title="Mehr Details" (mousedown)="lgModal.show();setHotelPopupIndex(hotel.index)">mehr..</button>
+                        <div class="hotelprice">Gesamtpreis:{{hotel.price+travelprice}}€ </div>   
+                        <div class="hotelinfo" >{{hotel.desc}} </div>
+                        <button class="hotelbutton" (mousedown)=setHotelprice(hotel.price,hotel.index); >{{selectedindex != hotel.index ? 'Wählen' : 'Ausgewählt'}}</button>
+
+                    </div>
+                    <!--Hotelfavoriten-->
+                    <div drag-scroll-item *ngFor="let hotelIndex of favArrHotel" class = "hotel" tabindex="0"  [style.background-color] = "getHotelBackground(hotelIndex)"> 
+                        <div class="hotelname">{{hotelArr[hotelIndex].name}}</div>
+                            <button (mousedown)=editFav(hotelIndex,favArrHotel) class ="favbox" [style.color] = "getFavoriteBackground(hotelIndex, favArrHotel)">★</button>
+            
+                        <div *ngIf="hotelArr[hotelIndex].showImg"><img [src] ="hotelArr[hotelIndex].imgSource"></div>
+                        <div *ngIf="!hotelArr[hotelIndex].showImg">                            
+                            <div *ngIf="getEndDest().toUpperCase()=='BERLIN'"><iframe src='https://maps.google.com/maps?q=Pariser+PlatzBerlin&amp;t=&amp;z=10&amp;ie=UTF8&amp;iwloc=&amp;output=embed'frameborder="0" style="border:0;"gestureHandling="greedy" allowfullscreen="false" aria-hidden="true" tabindex="0"></iframe></div>
+                            <div *ngIf="getEndDest().toUpperCase()=='PARIS'"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d95029.57673648694!2d2.2695810934579743!3d48.858609581889134!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e1f06e2b70f%3A0x40b82c3688c9460!2sParis%2C%20France!5e0!3m2!1sen!2sbg!4v1593005001366!5m2!1sen!2sbg" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe></div>
+                            <div *ngIf="getEndDest().toUpperCase()=='AMSTERDAM'"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d155959.15242902955!2d4.763876233293852!3d52.354792536256!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c63fb5949a7755%3A0x6600fd4cb7c0af8d!2sAmsterdam%2C%20Netherlands!5e0!3m2!1sen!2sbg!4v1593004579464!5m2!1sen!2sbg" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe></div>
+                        </div>
+                        <button class="MapImg" (mousedown) = changeMapImg(hotelIndex);>{{hotelArr[hotelIndex].showImg ? 'Karte' : 'Bild'}}</button>
+                        <div class="hotelRoom">{{decodeRoomtype(hotelArr[hotelIndex].room_code)}}</div>
+                        <button class="Popuphotelbutton" title="Mehr Details" (mousedown)="lgModal.show();setHotelPopupIndex(hotelIndex)">mehr..</button>
+                        <div class="hotelprice">Gesamtpreis:{{hotelArr[hotelIndex].price+travelprice}}€ </div>   
+                        <div class="hotelinfo" >{{hotelArr[hotelIndex].desc}}</div>
+                        <button class="hotelbutton" (mousedown)=setHotelprice(hotelArr[hotelIndex].price,hotelIndex); >{{selectedindex != hotelArr[hotelIndex].index  ? 'Wählen' : 'Ausgewählt'}}</button>
+                    </div>
+                </drag-scroll>
+            </div>
+            <!--Hotel Pop-up-->
+            <div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1" style.background-color ="black">
+                <div class="modal-dialog modal-lg" >
+                    <div class="modal-content"  style="width: 55vw;height: 65vh;">
+                        <div class="modal-header">
+                            <h4 id="dialog-sizes-name1" class="modal-title pull-left"style.color ="black">{{hotelArr[hotelPopupIndex].name}}<a style="color:gold">  ★★★★</a></h4>
+                            <button type="button" class="close pull-right" (click)="lgModal.hide()" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        
+                        <div class="modal-body"style="font-size: 1.5vh;">
+                            <div *ngIf="hotelArr[hotelPopupIndex].showImg" style="width: 33vw"><img [src] ="hotelArr[hotelPopupIndex].imgSource"></div>
+                            <div *ngIf="!hotelArr[hotelPopupIndex].showImg">
+                                <div *ngIf="getEndDest().toUpperCase()=='BERLIN'"><iframe src='https://maps.google.com/maps?q=Pariser+PlatzBerlin&amp;t=&amp;z=10&amp;ie=UTF8&amp;iwloc=&amp;output=embed'frameborder="0" style="border:0;"gestureHandling="greedy" allowfullscreen="false" aria-hidden="true" tabindex="0" ></iframe></div>
+                                <div *ngIf="getEndDest().toUpperCase()=='PARIS'"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d95029.57673648694!2d2.2695810934579743!3d48.858609581889134!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e1f06e2b70f%3A0x40b82c3688c9460!2sParis%2C%20France!5e0!3m2!1sen!2sbg!4v1593005001366!5m2!1sen!2sbg" width="400" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe></div>
+                                <div *ngIf="getEndDest().toUpperCase()=='AMSTERDAM'"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d155959.15242902955!2d4.763876233293852!3d52.354792536256!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c63fb5949a7755%3A0x6600fd4cb7c0af8d!2sAmsterdam%2C%20Netherlands!5e0!3m2!1sen!2sbg!4v1593004579464!5m2!1sen!2sbg" width="400" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe></div>
+                            </div>
+                            <button class="MapImg" style="margin-top:0.6vh"(mousedown) = changeMapImg(hotelArr[hotelPopupIndex].index);>{{hotelArr[hotelPopupIndex].showImg ? 'Karte' : 'Bild'}}</button>
+                            <div>Zimmerart: {{decodeRoomtype(hotelArr[hotelPopupIndex].room_code)}} Verpflegung: {{decodeBoardCode(hotelArr[hotelPopupIndex].board_code)}}</div>  
+                            <div><br>{{hotelArr[hotelPopupIndex].desc}}</div>
+                        </div>
+                        <div class="modal-footer" style="font-size: 2vh;">
+                            Ihr Gesamtpreis ist {{travelprice +hotelArr[hotelPopupIndex].price}}€
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            <!--Buttons um zu bestimmten Hotels zu Springen-->    
+            <button class = "buttonFirst" (click)="moveTo1(0)">Scroll zum Start</button>
+            <button class = "buttonSelected" (click)="moveTo1(selectedindex)">zu ihrer Wahl</button>
+            <button class = "buttonfav" (click)="moveTo1(hotelArr.length)">zu den Favoriten</button>
+            <button class = "buttonLeft1" (click)="moveLeft2()"><</button>
+            <button class = "buttonRight1" (click)="moveRight2()">></button>
+            <drag-scroll class="travelcontainer"
+            drag-scroll-y-disabled="true"
+            drag-scroll-x-disabled="true"
+            scrollbar-hidden="true"
+            #nav2>
+            <!--Fluege mit Ampelsystem-->
+            <div drag-scroll-item *ngFor="let index of cardArr" class = "card" [style.background-color] = "getTravelBackground(index)">
+                <div id="background">
+                    <p id="bg-text">FLUG</p>
+                </div>
+                <div class = "card-body">
+                  <div>
+                    <h5 *ngIf="index == 0" class="card-titel">Sparfuchs<button title ="Favorite"(mousedown)="editFav(index, favArrTravel)" class ="favboxTravel" [style.color] = "getFavoriteBackground(index, favArrTravel)">★</button></h5>
+                    <h5 *ngIf="index == 1" class="card-titel">Speedy<button title ="Favorite"(mousedown)="editFav(index, favArrTravel)" class ="favboxTravel" [style.color] = "getFavoriteBackground(index, favArrTravel)">★</button></h5>
+                    <h5 *ngIf="index == 2" class="card-titel">Ökosieger<button title ="Favorite"(mousedown)="editFav(index, favArrTravel)" class ="favboxTravel" [style.color] = "getFavoriteBackground(index, favArrTravel)">★</button></h5>
+                    <h5 *ngIf="index == 3" class="card-titel">Coyote<button title ="Favorite"(mousedown)="editFav(index, favArrTravel)" class ="favboxTravel" [style.color] = "getFavoriteBackground(index, favArrTravel)">★</button></h5>                
+                    <h5 *ngIf="index > 3" class="card-titel">Angebot {{index}}<button title ="Favorite"(mousedown)="editFav(index, favArrTravel)" class ="favboxTravel" [style.color] = "getFavoriteBackground(index, favArrTravel)">★</button></h5>
+                    <br>
+                        <div class = "priceAmpel" [style.background-color] ="getPriceBackground(flightArr[index].price)">Gesamtpreis: {{flightArr[index].price+hotelprice}}€ ({{getPriceRating(flightArr[index].price)}}/8)</div>
+                        <div class = "timeAmpel"[style.background-color] ="getTimeBackground(flightArr[index].fulltime)">Dauer: {{flightArr[index].flightDuration}}  ({{getExtraTime(index, 2)}}) ({{getTimeRating(flightArr[index].fulltime)}}/8)</div>
+                        <div class = "AuslastungAmpel" [style.background-color] ="getCarbonBackground(flightArr[index].auslastung)">CO<sub>2</sub> Auslastung: {{flightArr[index].auslastung}}kg ({{getCarbonRating(flightArr[index].auslastung)}}/8)</div>
+                    <div class ="traveldate">Hinflug:{{getDepArrtime(flightArr[index].outbound_dep_datetime)}}<br>{{getFlightStationName(flightArr[index].outbound_dep_airport)}}<br>Rückflug:{{getDepArrtime(flightArr[index].inbound_dep_datetime)}}<br>{{getFlightStationName(flightArr[index].inbound_dep_airport)}}</div> 
+                    <button class="travelbutton" (mousedown)="setTravelprice(flightArr[index].price, index, 2)">{{(selectedindex1 != index || selectedidentifier != 2) ? 'Wählen' : 'Ausgewählt'}}</button>
+                  </div>
+                    <div><hr>
+                        <button title="Vergleiche diesen Flug und Zug" class="vergleichsButton" (mousedown)="lgModal.show(); setVergleichIndex(index)">Details im Vergleich</button>
+                        <!--Vergleichs Pop-up-->
+                        <div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+                            <div class="modal-dialog modal-lg" >
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h4 id="dialog-sizes-name1" class="modal-title pull-left" style="font-size:3vh;height: 4vh;padding:0;margin:0;">Die Reisemöglichkeiten im Detail:</h4>
+                                    <button type="button" class="close pull-right" (mousedown)="lgModal.hide()" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>
+                                    
+                                    <div class="modal-body">
+                                        <table class="table">
+                                            <thead>
+                                              <tr>
+                                                <th scope="col">Verkehrsmittel</th>
+                                                <th scope="col">Route</th>
+                                                <th scope="col">Preis</th>
+                                                <th scope="col">Dauer</th>
+                                                <th scope="col">CO<sub>2</sub></th>
+                                                <th scope="col">Extras</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              <tr>
+                                                <th scope="row" class="align-middle" >{{getPaketname(vergleichsIndex)}}<br>Flug</th>
+                                                <td><div *ngIf="getEndDest().toUpperCase()=='BERLIN'"><iframe src="https://www.google.com/maps/embed?pb=!1m26!1m12!1m3!1d1598100.9204421565!2d8.973035079442386!3d51.68106374454724!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m11!3e4!4m3!3m2!1d50.849382399999996!2d6.782976!4m5!1s0x47a84e373f035901%3A0x42120465b5e3b70!2sberlin!3m2!1d52.520006599999995!2d13.404954!5e1!3m2!1sde!2sde!4v1592140341679!5m2!1sde!2sde" width="600" height="0" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe></div>
+                                                    <div *ngIf="getEndDest().toUpperCase()=='PARIS'"><iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d2463787.575991767!2d2.1275797680551602!3d49.34933351863656!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e4!4m5!1s0x47c09bdf1cd852d1%3A0x99f5cb2dc173e577!2sAachen%20Hbf%2C%20Bahnhofpl.%202A%2C%2052064%20Aachen%2C%20Germany!3m2!1d50.7681629!2d6.0907987!4m5!1s0x47e66e1f06e2b70f%3A0x40b82c3688c9460!2sParis%2C%20France!3m2!1d48.856614!2d2.3522219!5e0!3m2!1sen!2sbg!4v1593006216275!5m2!1sen!2sbg" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe></div>
+                                                    <div *ngIf="getEndDest().toUpperCase()=='AMSTERDAM'"><iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d1267517.505281577!2d4.806305302172823!3d51.64848159014558!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e4!4m5!1s0x47bf259169ab2fe5%3A0x42760fc4a2a77f0!2sCologne%2C%20Germany!3m2!1d50.937531!2d6.9602786!4m5!1s0x47c63fb5949a7755%3A0x6600fd4cb7c0af8d!2sAmsterdam%2C%20Netherlands!3m2!1d52.3666969!2d4.8945397999999996!5e0!3m2!1sen!2sbg!4v1593006408328!5m2!1sen!2sbg" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe></div>
+                                                </td>
+                                                <td class="align-middle">Gesamtpreis: <span [style.color] ="getPriceBackground(flightArr[vergleichsIndex].price)">{{flightArr[vergleichsIndex].price+hotelprice}}€ </span> </td>
+                                                <td class="align-middle" >Anreisezeit: ca. <span [style.color] ="getTimeBackground(flightArr[vergleichsIndex].fulltime)">{{getExtraTime(vergleichsIndex,2)}}</span><br>Flugdauer: <span [style.color] ="getTimeBackground(flightArr[vergleichsIndex].fulltime)"> {{flightArr[vergleichsIndex].flightDuration}}</span><br>Durchschnittsverspätung:1h</td>
+                                                <td class="align-middle"> <span [style.color] ="getCarbonBackground(flightArr[vergleichsIndex].auslastung)">{{flightArr[vergleichsIndex].auslastung}}kg</span> </td>
+                                                <td class="align-middle"> {{getExtras(vergleichsIndex,1,2)}} <br>{{getExtras(vergleichsIndex,2,2)}} <br> {{getExtras(vergleichsIndex,3,2)}}</td>
+                                                
+                                              </tr>
+                                              <tr>
+                                                <td colspan="6" class="align-center" style="padding: 0;"> <b>Hinflug: </b>Aachen Hbf <b style="font-size: 3vh;"> → </b> {{getFlightStationName(flightArr[vergleichsIndex].outbound_dep_airport)}} <b>-</b> {{getDepArrtime(flightArr[vergleichsIndex].outbound_dep_datetime)}}<b style="font-size: 3vh;"> → </b>{{getFlightStationName(flightArr[vergleichsIndex].outbound_arr_airport)}} <b>-</b> {{getDepArrtime(flightArr[vergleichsIndex].outbound_arr_datetime)}}<b style="font-size: 3vh;"> → </b>{{hotelArr[selectedindex].name}}<br> <b>Rückflug: </b>{{hotelArr[selectedindex].name}}<b style="font-size: 3vh;"> → </b> {{getFlightStationName(flightArr[vergleichsIndex].inbound_dep_airport)}} <b>-</b> {{getDepArrtime(flightArr[vergleichsIndex].inbound_dep_datetime)}}<b style="font-size: 3vh;"> → </b>{{getFlightStationName(flightArr[vergleichsIndex].inbound_arr_airport)}} <b>-</b> {{getDepArrtime(flightArr[vergleichsIndex].inbound_arr_datetime)}} <b style="font-size: 3vh;"> → </b> Aachen Hbf  </td>
+                                                
+                                            
+                                            </tr>
+                                            
+                                              <tr>
+                                                <th scope="row" class="align-middle" >{{getPaketname(vergleichsIndex)}}<br>Zug</th>
+                                                <td> <div *ngIf="getEndDest().toUpperCase()=='BERLIN'"><iframe src="https://www.google.com/maps/embed?pb=!1m26!1m12!1m3!1d3168839.0492739063!2d9.86564967486074!3d52.067681446655996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m11!3e3!4m3!3m2!1d50.849382399999996!2d6.782976!4m5!1s0x47a84e373f035901%3A0x42120465b5e3b70!2sberlin!3m2!1d52.520006599999995!2d13.404954!5e1!3m2!1sde!2sde!4v1592140149788!5m2!1sde!2sde" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe></div>
+                                                    <div *ngIf="getEndDest().toUpperCase()=='PARIS'"><iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d1515862.189680382!2d2.981480635244644!3d49.852060620749675!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e3!4m5!1s0x47c09bdf1cd852d1%3A0x99f5cb2dc173e577!2sAachen%20Hbf%2C%20Bahnhofpl.%202A%2C%2052064%20Aachen%2C%20Germany!3m2!1d50.7681629!2d6.0907987!4m5!1s0x47e66e1f06e2b70f%3A0x40b82c3688c9460!2sParis%2C%20France!3m2!1d48.856614!2d2.3522219!5e0!3m2!1sen!2sbg!4v1593006254129!5m2!1sen!2sbg" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe></div>
+                                                    <div *ngIf="getEndDest().toUpperCase()=='AMSTERDAM'"><iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d1269756.522449616!2d4.37342269298376!3d51.56835803466343!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e3!4m5!1s0x47c09bdf1cd852d1%3A0x99f5cb2dc173e577!2sAachen%20Hbf%2C%20Bahnhofpl.%202A%2C%2052064%20Aachen%2C%20Germany!3m2!1d50.7681629!2d6.0907987!4m5!1s0x47c63fb5949a7755%3A0x6600fd4cb7c0af8d!2sAmsterdam%2C%20Netherlands!3m2!1d52.3666969!2d4.8945397999999996!5e0!3m2!1sen!2sbg!4v1593006288665!5m2!1sen!2sbg" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe></div>
+                                                </td>
+                                                <td class="align-middle">Gesamtpreis: <span [style.color] ="getPriceBackground(trainArr[index].price+trainArrback[index].price)">{{setTrainPrice(trainArr[index].price, trainArrback[index].price)+hotelprice}}€</span></td>
+                                                <td class="align-middle"><b>Hinfahrt:</b><br>{{(trainArr[vergleichsIndex].startDestination) == "Aachen Hbf" ?" ":"Anreisezeit: ca. "}} <span [style.color] ="getTimeBackground(trainArr[vergleichsIndex].fulltime)">{{getExtraTime(vergleichsIndex,1)}}</span><br>Zugfahrt: <span [style.color] ="getTimeBackground(trainArr[vergleichsIndex].fulltime)">{{trainArr[vergleichsIndex].duration}}</span><br><b>Rückfahrt:</b><br>{{(trainArrback[vergleichsIndex].endDestination) == "Aachen Hbf" ?" ":"Abreisezeit: ca. "}} <span [style.color] ="getTimeBackground(trainArr[vergleichsIndex].fulltime)">{{getExtraTime(vergleichsIndex,0)}} </span><br>Zugfahrt: <span [style.color] ="getTimeBackground(trainArr[vergleichsIndex].fulltime)">{{trainArrback[vergleichsIndex].duration}}</span><br>Durchschnittsverspätung:12min</td>                                                <td class="align-middle"><span [style.color] ="getCarbonBackground(trainArr[vergleichsIndex].auslastung)">{{trainArr[vergleichsIndex].auslastung}}kg</span></td>
+                                                <td class="align-middle"> {{getExtras(vergleichsIndex,1,1)}} <br>{{getExtras(vergleichsIndex,2,1)}} <br> {{getExtras(vergleichsIndex,3,1)}}</td>
+                                            </tr>
+
+                                              <tr> 
+                                                <td colspan="6" class="align-center"  style="padding: 0;"> <b>Hinfahrt: </b> {{(trainArr[vergleichsIndex].startDestination) == "Aachen Hbf" ? "":"Aachen Hbf"}} <b style="font-size: 3vh;">{{(trainArr[vergleichsIndex].startDestination) == "Aachen Hbf" ? "":" → "}}</b> {{trainArr[vergleichsIndex].startDestination}} {{getDepArrtime(trainArr[vergleichsIndex].dep_date_time)}}<b style="font-size: 3vh;"> → </b> {{trainArr[vergleichsIndex].endDestination}} {{getDepArrtime(trainArr[vergleichsIndex].arr_date_time)}}<b style="font-size: 3vh;"> → </b>{{hotelArr[selectedindex].name}} <br> <b>Rückfahrt: </b> {{hotelArr[selectedindex].name}}<b style="font-size: 3vh;"> → </b> {{trainArrback[vergleichsIndex].startDestination}} {{getDepArrtime(trainArrback[vergleichsIndex].dep_date_time)}}<b style="font-size: 3vh;"> → </b> {{trainArrback[vergleichsIndex].endDestination}} {{getDepArrtime(trainArrback[vergleichsIndex].arr_date_time)}}  <b style="font-size: 3vh;">{{(trainArrback[vergleichsIndex].endDestination) == "Aachen Hbf" ? " ":" → "}}</b> {{(trainArrback[vergleichsIndex].endDestination) == "Aachen Hbf" ? " ":"Aachen Hbf"}} </td>
+                                                
+                                                
+                                              </tr>
+
+                                             
+                                            </tbody>
+                                          </table>
+                                    </div>
+
+                                    
+                                   
+                                </div>
+                            </div>
+                        </div>  
+                         <!-- End Vergleichs Popup -->
+                    </div>
+                     <div>
+                        <div id="background">
+                            <p id="bg-text1">ZUG</p>
+                        </div>
+                        <!--Zug Ampel-->
+                        <div class = "priceAmpel" [style.background-color] ="getPriceBackground(trainArr[index].price+trainArrback[index].price)">Gesamtpreis: {{setTrainPrice(trainArr[index].price, trainArrback[index].price)+hotelprice}}€ ({{getPriceRating(trainArr[index].price + trainArrback[index].price)}}/8)</div>
+                        <div class = "timeAmpel"[style.background-color] ="getTimeBackground(trainArr[index].fulltime)">Dauer: {{trainArr[index].duration}}  ({{getExtraTime(index, 1)}}) ({{getTimeRating(trainArr[index].fulltime)}}/8)</div>
+                            <div class = "AuslastungAmpel"[style.background-color] ="getCarbonBackground(trainArr[index].auslastung)">CO<sub>2</sub> Auslastung: {{trainArr[index].auslastung}}kg ({{getCarbonRating(trainArr[index].auslastung)}}/8)</div>
+                        <div class ="traveldate">Hinfahrt:{{getDepArrtime(trainArr[index].dep_date_time)}}<br>{{trainArr[index].startDestination}}<br>Rückfahrt:{{getDepArrtime(trainArrback[index].dep_date_time)}}<br>{{trainArrback[index].startDestination}}</div> 
+                        
+                    <button class="travelbutton" (mousedown)="setTravelprice(trainArr[index].price+trainArrback[index].price, index, 1)">{{(selectedindex1 != index || selectedidentifier != 1) ? 'Wählen' : 'Ausgewählt'}}</button>
+                    </div>
+                
+                </div>
+            </div> 
+  
+            </drag-scroll>
+            <!--Button um zu bestimmten Fluegen, Zuegen zu springen-->
+            <button class = "buttonFirst1" (click)="moveTo2(0)">Scroll zum Start</button>
+            <button class = "buttonSelected1" (click)="moveTo2(selectedindex1)">zu ihrer Wahl</button>
+            <button class = "buttonfav1" (click)="moveTo2(cardArr.length)">zu den Favoriten</button>
+        
+            <pre class = "gesamt">  Die günstigste Variante: <span style="color:rgb(47, 221, 4);margin-right: 10vw;">{{getCheapest()}}€</span>Sie zahlen <span style="color:rgb(180, 12, 12);margin-right: 10vw;">{{getDiffrenz()}}€ {{(travelprice + hotelprice) >= getCheapest() ?'mehr.' : 'weniger.'}}</span> Ihr Gesamtpreis ist {{travelprice +hotelprice}}€ <button class="btn btn-primary buttonBuchen">Buche!</button>
+            </pre>
+        </div>
+        
+    </div>
+</body>

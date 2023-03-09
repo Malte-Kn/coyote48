@@ -1,0 +1,182 @@
+# ######################################################################################################################
+# The webservice's frontend kubernetes deployment configuration
+# ######################################################################################################################
+# This file defines a deployment, a description of what kubernetes needs to do for us in order to run the frontend
+# web application. 
+#
+# This file is commented to provide you with explanations of every part of this 'Deployment' resource. Still this is 
+# much to process when you are new to Kubernetes. Don't worry about understanding everything right away. Instead use 
+# this file as template for your webservice and learn the details step-by-step! :-)
+#
+# The most important take-away of what this file does us: When we hand over this file to a kubernetes cluster via the
+# kubernetes command line tool 'kubectl' by running 'kubectl apply -f <path to this file>', the frontend docker 
+# container is run on a server in the kubernets cluster. 
+#
+# For a detailed documentation see: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+
+# ######################################################################################################################
+# Kubernets resource
+# ######################################################################################################################
+# A Kubernetes resource is a description of something that is in a Kubernetes cluster or something that we want to 
+# have in the Kubernets cluster. This sounds rather generic and in fact it is a very generic concept! 
+#
+# This file describes a single resource of a specific kind/type, here it is a so called 'Deployment'. For each kind 
+# of resource there should be a corresponding controller in the Kubernetes cluster that knows what to do with that 
+# kind of resource. For example, Kubernetes has inbuilt a controller that understands the resource 'Deployment' and 
+# whenever a Deployment-resource is applied, the controller will know that it has to start one or more docker 
+# containers. There are other inbuilt kinds of resources. For example, two more Kubernetes resources, a 'Service' 
+# and an 'Ingress' resource, participate in routing a request to the frontend's URL to the frontend docker 
+# container set up by this 'Deployment'-resource. Both of these resources are set up by the lab supervisors for 
+# you :-)
+#
+# Kubernetes also allows to define custom resources, but this is an advanced topic which we do no discuss here. Just 
+# note that without a controller that matches the given resource's kind, handing over a resource to Kubernetes has 
+# no effect. It is the matching controller that reads the resource, understands it and acts accordingly.
+
+# ======================================================================================================================
+# Version of the Kubernetes resource specification
+# ======================================================================================================================
+# The API version is specific to the kind of resource specified below. This allows the resource and the matching 
+# controller to evolve. For example, the deployment resource in a future version might need additional information. 
+# The specification of the version allows to have multiple versions of the same kind of resources without breaking 
+# old resource specifications.
+apiVersion: apps/v1
+
+# ======================================================================================================================
+# Type of the Kubernetes resource specification 
+# ======================================================================================================================
+# There are multiple predefined resource types in Kubernetes. The 'deployment' resource is one that describes a 
+# setup of one or more docker containers that we want to run in Kubernetes.
+kind: Deployment
+
+# ======================================================================================================================
+# Kubernetes resource metadata
+# ======================================================================================================================
+# This is a descriptive information about this Kubernetes resource. This 'metadata'-specification is something that 
+# every Kubernetes resource has.
+metadata:
+  # A kubernetes cluster can have multiple namespaces that allow to separate things from one another. The primary 
+  # reason for the usage of namespaces is to avoid overlapping names. Assume that to teams are using one kubernetes 
+  # and both have a deployment named "backend". This is only possible if the teams use different namespaces. 
+  #
+  # In this lab each team has its own namespace and there also namespaces for other lab services such as this 
+  # webservice example.
+  namespace: lab-mwtt-coyote
+
+  # A name that is unique within the given namespace
+  name: frontend
+
+# ======================================================================================================================
+# Kubernetes resource specification (configuration specific to the 'Deployment'-resource)
+# ======================================================================================================================
+spec:
+  # ====================================================================================================================
+  # Selector
+  # ====================================================================================================================
+  # For the beginning you just can accept the following 'selector' specification as given. :-)
+  #
+  # In case that you are interested what it does: Applying a 'Deployment' leads to the creation of a set of containers, 
+  # a so-called 'Pod'. The 'selector' specifies what already existing Pods (from previous applications of this 
+  # deployment) belong to this deployment. Thus, when applying an update of this Deployment Kubernetes will know that 
+  # this affects the corresponding Pods. For example, the existing may Pod need to be destroyed and an updated one is 
+  # started in its place.  
+  selector:
+    matchLabels:
+      app: frontend
+
+  # ====================================================================================================================
+  # Template
+  # ====================================================================================================================
+  # The following defines what do deploy.
+  template:
+    # ==================================================================================================================
+    # Deployment-specific metadata 
+    # ==================================================================================================================
+    # This is a descriptive information that is specific to the 'deployment'-resource.
+    metadata:
+
+      # ================================================================================================================
+      # Annotations
+      # ================================================================================================================
+      # Annotations are arbitrary non-identifying metadata, i.e. some information interesting to us human beings only
+      # see: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+      annotations:
+        # --------------------------------------------------------------------------------------------------------------
+        # The git commit's id/checksim
+        # --------------------------------------------------------------------------------------------------------------
+        # For the sake of learning, we add the git commit id which could be useful if we want to see what git commit 
+        # version is running in kubernetes. Note that we expect <VERSION> to be replaced by the respective git commit 
+        # id before this configuration is applied. We do the replacement in the deployment script in the gitlab CI 
+        # definition (see the 'sed ...' command in .gitlab-ci.yml).
+        checksum/git: <VERSION>
+
+      # ================================================================================================================
+      # Labels
+      # ================================================================================================================
+      # Labels are arbitrary key-value pairs that may be used to identifiy / reference kubernetes resources.
+      # see: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+      labels:
+        # The "app"-label here is used by a 'Service' kubernetes resource that the lab supervisors set up for you. The 
+        # is plays a part in making our webservice docker containers accessible from the internet. For this to work, 
+        # the 'Service' resource must be able to identify the 'Deployment' it belongs to, since it is possible to have 
+        # more than one Deployment in a Kubernetes cluster at the same time. The 'Service' was set up to look for a 
+        # Deployment that has the 'app' = 'frontend' label. 
+        #
+        # Advanced topic: Note that this it is no accident that this corresponds to what is specified above in 
+        #                 'selector' section (in .spec.selector.matchLabels).
+        #                 For more information see: 
+        #                 https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#creating-a-deployment
+        app: frontend
+    
+    # ==================================================================================================================
+    # Deployment configuration
+    # ==================================================================================================================
+    # Here we specify what docker container(s) we want to run. 
+    spec:
+      # ================================================================================================================
+      # List of docker containers that are part of this deployment
+      # ================================================================================================================
+      # Here we specify only a single container that we want to run, which we name 'frontend'. Note that the 'backend' 
+      # is set up by its own Kubernetes 'Deployment' resource. This allows us to deploy 'frontend' and backend 
+      # independently from one another. This is for example useful when releasing an update for the backend, but not 
+      # for the frontend as we only need to update the backend.
+      containers:
+      - name: frontend
+        # --------------------------------------------------------------------------------------------------------------
+        # Docker image 
+        # --------------------------------------------------------------------------------------------------------------
+        # The Docker image source for this container. 
+        # (like <VERSION> before, the string <IMAGE> is replaced by the gitlab ci script with the actual image URL)
+        image: <IMAGE>
+
+        # --------------------------------------------------------------------------------------------------------------
+        # Ports that the application inside the docker container uses
+        # --------------------------------------------------------------------------------------------------------------
+        # Note: We give the port a name that we then can use for referencing this port. This can be an arbitrary name. 
+        #       The 'Service' Kubernetes' resource set up by the lab supervisors looks for a port named 'http'. The
+        #       benefit of using named ports is that we can change the port number here, without touching other 
+        #       resources, such as the 'Service' resource.
+        ports:
+        - name: http
+          containerPort: 80
+
+      # ================================================================================================================
+      # Credentials for accessing the Docker registry with our docker images
+      # ================================================================================================================
+      # Since we are pulling docker images from a private docker registry (Gitlab's docker registry), Kubernetes needs 
+      # to credentials for logging into the Gitlab docker registry.
+      #
+      # In order to pull the docker image from the private gitlab docker registry, kubernetes needs to authenticate 
+      # with the registry. This is done by using a gitlab 'deploy token' that has read access to the gitlab registry 
+      # (see your gitlab project or group -> "Settings" -> "CI /CD" -> "Deploy Tokens"). The deploy token is a 
+      # username and password combination. The deploy token must grant read access to the registry (the respective 
+      # chekbox in gitlab's deployment tokens settings menu must be ticked when creating a token).
+      #
+      # In order to use the private docker images in the kubernetes, kubernetes needs to know the deploy token. For 
+      # this a kubernetes secret is used. 
+      # see https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      #
+      # For your convenience, a deploy token was already created by the lab supervisors abd stored as a kubernetes 
+      # secret named 'docker-registry-credentials'.
+      imagePullSecrets:
+      - name: docker-registry-credentials

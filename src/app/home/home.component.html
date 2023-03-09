@@ -1,0 +1,77 @@
+<div class="whole-cont" style="min-height: 100vh; min-width: 100vw;">
+    <div class="container1" style="min-height: 100vh; min-width: 100vw;" >
+        <h2><b>Coyote48</b></h2>
+        <form class="main-inputs">
+            <section class="line1">
+                <div style="float: left;">
+                    <label class="toMove" for="startpunkt">Startpunkt:</label>
+                    <input id="startpunkt" 
+                            #startpunkt 
+                            class="form-control" 
+                            type="text" 
+                            placeholder="Startpunkt" 
+                            required  
+                            value = "Aachen" 
+                            autocomplete="off">
+                </div>
+                
+                <div style="float: left;">
+                    <label class="toMove" for="zielpunkt">Zielpunkt:</label>
+                    <input id="zielpunkt" 
+                            #endDest 
+                            class="form-control" 
+                            type="text"
+                            value= {{homePageDataService.endDest}}   
+                            placeholder="Zielpunkt" 
+                            required
+                            autocomplete="off">
+                </div>
+                
+                <div class="persAnz" style="float: left;">
+                    <label for="anzPers">Anzahl von Pesonen:</label>
+                    <input id="anzPers" #anzPers class="form-control" type="number" value=1 min=1 max=10 required >
+                </div>
+
+                <br style="clear:both">
+
+            </section>
+
+            <section class="line2">
+                <div style="float: left;">
+                    <label class="toMove" for="hinreise">Datum Hinreise:</label>
+                        <div>
+                          <input type="text"
+                                 #startDate
+                                 [maxDate]="maxStartDate"
+                                 placeholder="Datum Hinreise"
+                                 value={{today}}
+                                 class="form-control"
+                                 bsDatepicker
+                                 [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD/MM/YYYY' }"
+                                 required
+                                 (bsValueChange) = "onValueChange($event)" >
+                        </div>
+                </div>
+                <div style="float: left;">
+                    <label class="toMove" for="rueckreise">Datum Rückreise:</label>
+                    <div>
+                        <input type="text"
+                               #endDate
+                               [minDate]="minEndDate"
+                               placeholder="Datum Rückreise"
+                               value={{oneWeekLater}}
+                               class="form-control"
+                               bsDatepicker
+                               [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD/MM/YYYY'  }"
+                               (bsValueChange) = "onValueChangeEnd($event)"
+                               required >
+                      </div>
+                </div>
+                <button type="submit" (click)="onButtonClick(startpunkt.value,endDest.value,anzPers.value,startDate.value,endDate.value)" class="btn btn-primary">Suche!</button>
+                
+            </section>
+        </form>  
+        <app-bottom-slider></app-bottom-slider>
+    </div>
+    
+</div>

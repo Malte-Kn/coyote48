@@ -1,0 +1,254 @@
+.container{
+    font: normal 16px Arial,Helvetica,sans-serif;
+    position: relative;
+   /* background-image: url(../../assets/images/sliderImages/aachen1.jpg);
+    background-position: center center; 
+    background-repeat: no-repeat;    
+    background-attachment: fixed;
+    background-size: cover;*/
+    height: 100vh;
+    width: 100vh;
+    border-radius: 30px;
+}
+.backgroundFiller{
+    background-image: url(../../assets/images/sliderImages/aachen1.jpg);
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat; 
+    background-attachment: fixed;
+    background-position: center center;
+    height: 100vh;
+    width: 100vw;
+    background-size: cover;
+
+}
+h2{
+    color: black;
+    text-align: center;
+    font-size: 300%;
+    margin-top: 0%;
+}
+
+.main-inputs{
+    border:10px beige solid;
+    background-color: beige;
+    margin-left: auto;
+    margin-right: auto;
+    width: 960px;
+    height: auto;
+    border-radius: 30px;
+    margin-bottom: 0%;
+    margin-top:20%;
+
+}
+
+
+
+.line1{
+    padding-bottom: 3%;
+}
+
+label{
+    margin-left: 26%;
+}
+.line1 input{
+    margin-right: 80px;
+    margin-left: 80px;
+
+}
+
+.line2 input{
+    margin-right: 80px;
+    margin-left: 80px;
+}
+
+
+
+input{
+    width: 150px;
+    height: 20px;
+    border-radius: 6px;
+}
+
+
+.line2{
+    margin-top: 4%;
+    margin-bottom: 4%;
+}
+
+.line3{
+    margin-top: 20%;
+    margin-bottom: 4%;
+}
+
+.line4{
+    margin-top: 10%;
+    margin-bottom: 4%;
+}
+
+.line3 input[type=checkbox]{
+    margin-right: 80px;
+    margin-left: 80px;
+
+}
+
+.line4 input{
+    margin-right: 80px;
+    margin-left: 80px;
+
+}
+
+input[type="button"]{
+    margin-right: 10000px;
+    margin-top:0px;
+    height: 30px;
+    width: auto;
+    background-color: white;
+    text-align: center;
+    color: black;
+    margin-right:0px;
+    margin-bottom: 0px;
+    padding-bottom: 0%;
+    cursor: pointer;
+    position: relative;
+}
+
+img{
+    margin-left:-2%;
+    margin-top: auto;
+    margin-bottom: auto;
+    width:12%; 
+    /*width: 250px; */
+    /*margin-left: -60px;*/
+    height: auto;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    background-position: center center;
+    background-repeat: no-repeat;  
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+
+.line1{
+    position: center;
+}
+
+ label,input{
+     display: block;
+ }
+/* ######################################## CUSTOM CHECKBOXES ######################################## */
+input[type='checkbox'] {
+    -webkit-appearance:none;
+    /* display: inline-block; */
+    text-align: right;
+    width:30px;
+    height:30px;
+    background: #FFFFFF;
+    background-size: contain;
+    border-radius:5px;
+    border:1px solid #555;
+    
+}
+input[type='checkbox']:checked {
+    
+    background-image: url(../../assets/images/Icons/checkmark_icon_green02.png);
+}
+/* Checkbox Flugvergleich*/
+input.flights[type='checkbox']:checked {
+    
+    background-image: url(../../assets/images/Icons/airplaneIcon.png);
+
+}
+/* Checkbox Zugvergleich*/
+input.trains[type='checkbox']:checked {
+    
+    background-image: url(../../assets/images/Icons/train_icon.png);
+}
+/* Checkbox Gepäck*/
+input.baggage[type='checkbox']:checked {
+    
+    background-image: url(../../assets/images/Icons/baggage_icon.png);
+}
+
+input.timeCheck[type='checkbox']:checked {
+    
+    background-image: url(../../assets/images/Icons/fast_icon.png);
+}
+input.environmentCheck[type='checkbox']:checked {
+    
+    background-image: url(../../assets/images/Icons/umwelt_icon.png);
+}
+input.costCheck[type='checkbox']:checked {
+    
+    background-image: url(../../assets/images/Icons/money_icon.png);
+}
+
+
+/* Attribute Klassenselektor Zug*/
+
+.trainClassSelector{
+    margin-top: 30px;
+    margin-left: -60px;
+}
+input[type=text]{
+    width: 150px;
+    height: 30px;
+    border-radius: 6px;
+}
+
+
+  /* Dropdown Menu Stuff */
+  .menu-btn {
+    background-color: grey;
+    color: white;
+    padding: 16px;
+    font-size: 20px;
+    font-weight: bolder;
+    margin-top: 0px;
+    height: 60px;
+    margin-left: -5px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .dropdown-menu {
+    min-width: 0px;
+    padding: 0px;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .menu-content {
+    display: none;
+    position: absolute;
+    background-color: grey;
+    min-width: 160px;
+    z-index: 1;
+  }
+  
+  .links {
+    color: rgb(255, 255, 255);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 1px solid black;
+  }
+  
+  .links:hover {
+    background-color: rgb(8, 107, 46);
+  }
+  
+  .dropdown-menu:hover .menu-btn {
+    background-color: lightgrey;
+    color: white;
+  }
+
+  
