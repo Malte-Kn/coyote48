@@ -1,6 +1,6 @@
 # Coyote48
 
-This project was build on a privious version and ist not Maintained.
+This project was build on a privious version and is not Maintained.
 
 ## Development server
 
