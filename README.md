@@ -1,6 +1,8 @@
 # Coyote48
 
-This project was build on a privious version and is not Maintained.
+This project was build on a previous version and is not maintained.
+Web-Application Project created as part of a practicum to compare travel by plane and train.
+
 
 ng serve with node 14.20 or 16
 ## Development server
